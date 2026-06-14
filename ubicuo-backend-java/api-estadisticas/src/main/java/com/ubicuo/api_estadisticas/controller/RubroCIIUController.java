@@ -61,18 +61,34 @@ public class RubroCIIUController {
             nombreRubro = rubroCompleto.getDescripcionLarga(); // Usamos la larga para más precisión
         }
 
-        // 3. LA SÚPER CONSULTA AL ESQUEMA ESTRELLA EN POSTGRESQL
-        System.out.println("--- INICIANDO ANÁLISIS ESTADÍSTICO PARA: " + ciiu + " EN " + provincia.toUpperCase() + " ---");
+        // 3. LA CONSULTA MULTIDIMENSIONAL AL ESQUEMA ESTRELLA
+        System.out.println("--- EXTRACCIÓN DE DATOS PARA LA IA: " + ciiu + " EN " + provincia.toUpperCase() + " ---");
         
-        // Agregamos '0 AS casos_mortales' temporalmente para que tu OpenAiService no se rompa al buscar esa columna
-        String sql = "SELECT h.anio, h.indice_incidencia, 0 AS casos_mortales " +
+        // MAGIA DE DATA ENGINEERING: Al usar "h.*", extraemos TODAS las columnas de la tabla de hechos.
+        // Si mañana inyectas más Excels (edades, letalidad, sexo), Java las absorberá automáticamente 
+        // y se las entregará a OpenAI sin que tengas que recompilar este código.
+        String sql = "SELECT h.*, d.nombre_sector " +
                      "FROM hechos_accidentabilidad h " +
                      "JOIN dim_actividad_sectores d ON h.sector_letra = d.sector_letra " +
                      "WHERE h.provincia = ? " +
                      "AND CAST(SUBSTRING(?, 1, 3) AS INTEGER) BETWEEN d.ciiu_inicio AND d.ciiu_fin " +
                      "ORDER BY h.anio ASC";
 
-        List<Map<String, Object>> estadisticas = jdbcTemplate.queryForList(sql, provincia, ciiu);
+        // Obtenemos los datos crudos
+        List<Map<String, Object>> estadisticasCrudas = jdbcTemplate.queryForList(sql, provincia, ciiu);
+        
+        // Creamos una lista nueva modificable para inyectar protecciones para el Frontend
+        List<Map<String, Object>> estadisticas = new java.util.ArrayList<>();
+        
+        for (Map<String, Object> fila : estadisticasCrudas) {
+            Map<String, Object> filaModificable = new java.util.HashMap<>(fila);
+            
+            // Parche de seguridad: Si la columna 'casos_mortales' aún no existe en la BD, la forzamos a 0
+            // para que la línea roja de Chart.js en Angular no se rompa por valores 'undefined'.
+            filaModificable.putIfAbsent("casos_mortales", 0);
+            
+            estadisticas.add(filaModificable);
+        }
 
         if (estadisticas.isEmpty()) {
             return org.springframework.http.ResponseEntity.status(404)
@@ -83,8 +99,8 @@ public class RubroCIIUController {
                     ));
         }
 
-        // 4. Le pasamos todo a OpenAI para redactar el informe
-        System.out.println("Generando resumen multidimensional con IA...");
+        // 4. Le pasamos todo el bloque dinámico a OpenAI
+        System.out.println("Generando informe gerencial multidimensional con IA...");
         String analisisIA = openAiService.analizarEstadisticas(nombreRubro, estadisticas);
 
         // 5. Empaquetamos la respuesta final para Angular

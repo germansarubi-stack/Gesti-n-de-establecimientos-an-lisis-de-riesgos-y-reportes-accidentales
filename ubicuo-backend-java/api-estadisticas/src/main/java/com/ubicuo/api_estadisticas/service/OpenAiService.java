@@ -85,24 +85,37 @@ public class OpenAiService {
         return consultarOpenAI(prompt);
     }
 
-    // PASO 3: Analizar estadísticas crudas
+    // PASO 3: Analizar estadísticas crudas y generar un informe ejecutivo
     public String analizarEstadisticas(String rubro, List<Map<String, Object>> estadisticas) {
         if (estadisticas.isEmpty()) return "No hay datos suficientes para analizar.";
         
-        // Convertimos la tabla de datos a un texto que la IA pueda leer
+        // Convertimos la tabla de datos a un texto dinámico.
+        // Ahora lee TODAS las columnas que traiga el SQL, sin importar cuántas sean.
         StringBuilder datosTexto = new StringBuilder();
         for (Map<String, Object> fila : estadisticas) {
-            datosTexto.append("Año ").append(fila.get("anio"))
-                      .append(": Índice Incidencia = ").append(fila.get("indice_incidencia"))
-                      .append(", Casos Mortales = ").append(fila.get("casos_mortales")).append("\n");
+            datosTexto.append("Año ").append(fila.get("anio")).append(": ");
+            
+            fila.forEach((columna, valor) -> {
+                if (!columna.equalsIgnoreCase("anio")) {
+                    // Reemplaza guiones bajos por espacios para que la IA lea mejor (ej: indice_incidencia -> indice incidencia)
+                    String nombreColumna = columna.replace("_", " "); 
+                    datosTexto.append("[").append(nombreColumna).append(": ").append(valor).append("] ");
+                }
+            });
+            datosTexto.append("\n");
         }
         
-        String prompt = "Actúa como un Licenciado en Seguridad e Higiene Laboral. " +
-                "Analiza estas estadísticas oficiales de la SRT para el rubro '" + rubro + "'.\n" +
-                "Datos Históricos:\n" + datosTexto.toString() + "\n" +
-                "Redacta un resumen analítico de máximo 4 líneas. Indica si la tendencia de accidentes sube o baja, " +
-                "qué nivel de riesgo representa y da una breve recomendación preventiva. " +
-                "Habla en tono profesional, formal y directo. No uses viñetas.";
+        String prompt = "Actúa como un Senior Data Analyst y Experto en Inteligencia de Negocios orientado a la Seguridad Ocupacional.\\n" +
+                "A continuación te proveeré un extracto de una base de datos multidimensional (Data Warehouse) con el historial " +
+                "del rubro: '" + rubro + "'.\\n\\n" +
+                "DATOS HISTÓRICOS:\\n" + datosTexto.toString() + "\\n\\n" +
+                "INSTRUCCIONES PARA EL REPORTE EJECUTIVO:\\n" +
+                "Redacta un informe gerencial profundo y completo. No te limites en tu análisis. Debes incluir:\\n" +
+                "1. Evolución Histórica: Detecta tendencias a largo plazo, picos anómalos o mejoras significativas a lo largo de los años.\\n" +
+                "2. Correlaciones: Si los datos muestran letalidad, mortalidad o incidencias, explica cómo se relacionan entre sí en este rubro específico.\\n" +
+                "3. Nivel de Riesgo Estructural: Define el nivel de peligrosidad del sector y justifícalo con los números proporcionados.\\n" +
+                "4. Recomendaciones Estratégicas: Brinda directivas de modernización y prevención de alto nivel orientadas a la gerencia.\\n\\n" +
+                "Utiliza un tono corporativo, analítico y persuasivo. Puedes usar negritas y párrafos separados para estructurar la lectura, pero no uses tablas ni gráficos ASCII.";
                 
         return consultarOpenAI(prompt);
     }
