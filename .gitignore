@@ -1,0 +1,60 @@
+# ==========================================
+# UBICUO MONOREPO - .gitignore
+# ==========================================
+
+# ------------------------------------------
+# 1. SISTEMA OPERATIVO, EDITORES Y ARCHIVOS LOCALES
+# ------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.log
+
+# Variables de entorno y archivos locales con secretos.
+**/.env
+**/.env.*
+!**/.env.example
+**/application.properties
+
+# ------------------------------------------
+# 2. FRONTEND (Angular - ubicuo-front)
+# ------------------------------------------
+ubicuo-front/node_modules/
+ubicuo-front/dist/
+ubicuo-front/out-tsc/
+ubicuo-front/.angular/
+ubicuo-front/npm-debug.log
+ubicuo-front/yarn-error.log
+
+# ------------------------------------------
+# 3. BACKEND (Java/Spring Boot - ubicuo-backend-java)
+# ------------------------------------------
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+ubicuo-backend-java/**/.mvn/
+
+# ------------------------------------------
+# 4. ETL & DATA ENGINEERING (Python - ubicuo-extractor)
+# ------------------------------------------
+ubicuo-extractor/__pycache__/
+ubicuo-extractor/*.py[cod]
+ubicuo-extractor/venv/
+ubicuo-extractor/env/
+ubicuo-extractor/.venv/
+
+# Protegemos insumos pesados o sensibles del gobierno.
+ubicuo-extractor/accidentabilidad/*.xlsx
+ubicuo-extractor/accidentabilidad/*.csv
+
+# ------------------------------------------
+# 5. INFRAESTRUCTURA (Docker - ubicuo-infra)
+# ------------------------------------------
+# Ignorar los volúmenes de datos donde PostgreSQL guarda la base real.
+ubicuo-infra/data/
+ubicuo-infra/pgdata/
+ubicuo-infra/db_data/
+ubicuo-infra/docker-compose.yml

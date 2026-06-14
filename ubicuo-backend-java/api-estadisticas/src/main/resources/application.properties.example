@@ -1,0 +1,18 @@
+spring.application.name=api-estadisticas
+# Copia este archivo a application.properties o configura las variables de entorno equivalentes.
+spring.datasource.url=jdbc:postgresql://${POSTGRES_HOST:POSTGRES_HOST}:${POSTGRES_PORT:POSTGRES_PORT}/${POSTGRES_DB:POSTGRES_DB}
+spring.datasource.username=${POSTGRES_USER}
+spring.datasource.password=${POSTGRES_PASSWORD:}
+
+# Configuración de JPA/Hibernate
+# 'update' actualiza el esquema, 'none' no toca las tablas que se crean
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# Puerto donde va a correr nuestro microservicio Java
+server.port=8080
+
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+openai.api.key=${OPENAI_API_KEY:}
