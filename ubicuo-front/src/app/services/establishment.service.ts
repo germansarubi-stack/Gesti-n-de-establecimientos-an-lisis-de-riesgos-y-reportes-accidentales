@@ -78,17 +78,18 @@ export class EstablishmentService {
     }
   }
 
-  // La llamada a tu API corporativa (Actualizada para el Data Warehouse)
-  sugerirCIIU(descripcion: string, provincia: string = 'Nacional'): Observable<any> {
-    const params = new HttpParams()
-      .set('descripcion', descripcion)
-      .set('provincia', provincia);
-
+  // Llamada 1: Rápida, solo manda la descripción
+  sugerirCIIU(descripcion: string): Observable<any> {
+    const params = new HttpParams().set('descripcion', descripcion);
     return this.http.get('http://localhost:8080/api/ciiu/sugerir', { params });
   }
 
-  // Llamada al endpoint de estadísticas
-  obtenerEstadisticasCIIU(ciiu: string): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/ciiu/estadisticas/${ciiu}`);
+  // Llamada 2: Profunda, manda el código y la provincia
+  obtenerEstadisticasCIIU(ciiu: string, rubro: string, provincia: string): Observable<any> {
+    const params = new HttpParams()
+      .set('ciiu', ciiu)
+      .set('rubro', rubro)
+      .set('provincia', provincia);
+    return this.http.get('http://localhost:8080/api/ciiu/estadisticas', { params });
   }
 }

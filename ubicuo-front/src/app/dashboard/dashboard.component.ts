@@ -561,78 +561,61 @@ export class DashboardComponent implements OnInit {
     alert(`📊 Reportes ambientales y de higiene - ${nombre}\n(Sistema de indicadores)`);
   }
 
-  // --- BOTÓN 1: Maneja SOLO la vista del código CIIU ---
+  // --- BOTÓN 1: Solo clasifica ---
   onCIIU(est: Establishment): void {
-    // Si ya tiene código (ya viajó al backend), solo abrimos/cerramos este panel
     if (est.ciiuCode) {
       est.showCiiu = !est.showCiiu;
       return;
     }
 
-    // Arranca la carga
     est.loadingCiiu = true;
     est.showCiiu = false;
 
     const contextoParaIA = `${est.areaRubro}. ${est.especificacion}`;
-    const provinciaParaIA = est.provincia || 'Nacional';
 
-    this.estService.sugerirCIIU(contextoParaIA, provinciaParaIA).subscribe({
+    // Solo pide el CIIU
+    this.estService.sugerirCIIU(contextoParaIA).subscribe({
       next: (respuesta) => {
         est.ciiuCode = respuesta.codigo_ciiu; 
         est.ciiuDescription = respuesta.rubro; 
-        est.analisisIA = respuesta.analisis_inteligente;
-
-        if (respuesta.estadisticas_crudas && respuesta.estadisticas_crudas.length > 0) {
-          const anios = respuesta.estadisticas_crudas.map((d: any) => d.anio);
-          const incidencias = respuesta.estadisticas_crudas.map((d: any) => d.indice_incidencia);
-          const mortales = respuesta.estadisticas_crudas.map((d: any) => d.casos_mortales);
-
-          est.chartData = {
-            labels: anios,
-            datasets: [
-              { data: incidencias, label: 'Índice de Incidencia', backgroundColor: '#b77cf0', borderRadius: 4 },
-              { data: mortales, label: 'Casos Mortales', backgroundColor: '#ff4d4d', borderRadius: 4 }
-            ]
-          };
-        }
-
-        est.loadingCiiu = false;
         
-        // COMPORTAMIENTO VISUAL SEPARADO:
-        est.showCiiu = true;   // ABRIMOS el globo de CIIU
-        est.showStats = false; // MANTENEMOS CERRADO el de estadísticas
-
+        est.loadingCiiu = false;
+        est.showCiiu = true;   
+        
         this.estService.updateEstablishment(est); 
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error("Error de la IA o de la BD:", err);
-        alert('No se pudieron obtener los datos para esta provincia y rubro.');
+        console.error("Error al obtener CIIU:", err);
+        alert('No se pudo clasificar el establecimiento.');
         est.loadingCiiu = false;
         this.cdr.detectChanges();
       }
     });
   }
 
-  // --- BOTÓN 2: Maneja SOLO la vista del Gráfico y la IA ---
+  // --- BOTÓN 2: Solo Data Warehouse ---
   onVerEstadisticas(est: Establishment): void {
-    // Si ya viajó al backend (porque tocó "Ver CIIU" antes), abre al instante
+    // Si ya lo consultó antes, abre y cierra al instante
     if (est.chartData && est.analisisIA) {
       est.showStats = !est.showStats;
       return;
     }
 
-    // Si tocó este botón PRIMERO, arranca la carga
+    // Validación UX: No podés pedir estadísticas si no sabés el rubro
+    if (!est.ciiuCode) {
+      alert('Por favor, obtené el código CIIU primero haciendo clic en "Ver CIIU".');
+      return;
+    }
+
     est.statsLoading = true;
     est.showStats = false;
+    
+    const provinciaParaBD = est.provincia || 'Nacional';
 
-    const contextoParaIA = `${est.areaRubro}. ${est.especificacion}`;
-    const provinciaParaIA = est.provincia || 'Nacional';
-
-    this.estService.sugerirCIIU(contextoParaIA, provinciaParaIA).subscribe({
+    // Pide la estadística pasando los datos que ya obtuvimos en el Paso 1
+    this.estService.obtenerEstadisticasCIIU(est.ciiuCode, est.ciiuDescription!, provinciaParaBD).subscribe({
       next: (respuesta) => {
-        est.ciiuCode = respuesta.codigo_ciiu;
-        est.ciiuDescription = respuesta.rubro;
         est.analisisIA = respuesta.analisis_inteligente;
 
         if (respuesta.estadisticas_crudas && respuesta.estadisticas_crudas.length > 0) {
@@ -650,16 +633,13 @@ export class DashboardComponent implements OnInit {
         }
 
         est.statsLoading = false;
-        
-        // COMPORTAMIENTO VISUAL SEPARADO:
-        est.showStats = true; // ABRIMOS el panel de estadísticas
-        est.showCiiu = false; // MANTENEMOS CERRADO el globo de CIIU
+        est.showStats = true; 
 
         this.estService.updateEstablishment(est);
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error("Error:", err);
+        console.error("Error al obtener estadísticas:", err);
         alert('No hay datos históricos suficientes para este rubro.');
         est.statsLoading = false;
         this.cdr.detectChanges();
