@@ -110,7 +110,7 @@ public class OpenAiService {
                 "del rubro: '" + rubro + "'.\\n\\n" +
                 "DATOS HISTÓRICOS:\\n" + datosTexto.toString() + "\\n\\n" +
                 "INSTRUCCIONES PARA EL REPORTE EJECUTIVO:\\n" +
-                "Redacta un informe gerencial profundo y completo. No te limites en tu análisis. Debes incluir:\\n" +
+                "Redacta un informe gerencial actuando como si la alta gerencia te pidiera que le expliques ese informe. No te limites en tu análisis. Debes incluir:\\n" +
                 "1. Evolución Histórica: Detecta tendencias a largo plazo, picos anómalos o mejoras significativas a lo largo de los años.\\n" +
                 "2. Correlaciones: Si los datos muestran letalidad, mortalidad o incidencias, explica cómo se relacionan entre sí en este rubro específico.\\n" +
                 "3. Nivel de Riesgo Estructural: Define el nivel de peligrosidad del sector y justifícalo con los números proporcionados.\\n" +

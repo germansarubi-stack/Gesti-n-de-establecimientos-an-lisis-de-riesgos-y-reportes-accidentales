@@ -1,159 +1,146 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="login-container">
-      <div class="login-card">
-        <div class="login-header">
-          <h1>Higiene y Seguridad</h1>
-          <p>Inicie sesión para gestionar establecimientos</p>
+    <div class="min-h-screen bg-gradient-to-br from-neutral-50 via-secondary-50 to-primary-50 flex items-center justify-center p-4 relative overflow-hidden">
+      <!-- Decorative elements -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-fade-in-up"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-fade-in-down" style="animation-delay: 0.2s;"></div>
+      
+      <div class="w-full max-w-md z-10 animate-scale-in">
+        <!-- Card with glass effect -->
+        <div class="glass-effect p-8 md:p-12">
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-primary mb-4">
+              <span class="text-2xl">🏭</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gradient-primary mb-2">
+              SafeWork
+            </h1>
+            <p class="text-neutral-600 font-medium">
+              Sistema de Higiene y Seguridad
+            </p>
+          </div>
+
+          <!-- Form -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+            <!-- Username field -->
+            <div class="space-y-2">
+              <label for="username" class="form-label">
+                <span class="text-neutral-700">👤 Usuario</span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                formControlName="username"
+                placeholder="Ingrese su usuario"
+                autocomplete="off"
+                class="form-input"
+              />
+              <p *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" 
+                 class="text-xs text-red-500 mt-1">
+                El usuario es requerido
+              </p>
+            </div>
+
+            <!-- Password field -->
+            <div class="space-y-2">
+              <label for="password" class="form-label">
+                <span class="text-neutral-700">🔒 Contraseña</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                formControlName="password"
+                placeholder="Ingrese su contraseña"
+                class="form-input"
+              />
+              <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+                 class="text-xs text-red-500 mt-1">
+                La contraseña es requerida
+              </p>
+            </div>
+
+            <!-- Submit button -->
+            <button
+              type="submit"
+              [disabled]="loginForm.invalid || isLoading"
+              class="w-full btn-primary mt-6"
+              [class.opacity-50]="isLoading"
+              [class.cursor-not-allowed]="isLoading"
+            >
+              <span *ngIf="!isLoading">✨ Ingresar</span>
+              <span *ngIf="isLoading" class="flex items-center justify-center gap-2">
+                <span class="animate-spin">⏳</span> Validando...
+              </span>
+            </button>
+          </form>
+
+          <!-- Demo info -->
+          <div class="mt-6 p-4 bg-secondary-50 rounded-lg border-l-4 border-secondary-500">
+            <p class="text-xs text-neutral-600">
+              <span class="font-semibold text-secondary-600">💡 Demo:</span>
+              Cualquier usuario/contraseña (ej: admin / 123)
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div class="mt-6 text-center">
+            <p class="text-xs text-neutral-500">
+              © 2024 Sistema de Higiene y Seguridad CIIU
+            </p>
+          </div>
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="username">Usuario</label>
-            <input
-              type="text"
-              id="username"
-              formControlName="username"
-              placeholder="Ingrese su usuario"
-              autocomplete="off"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              formControlName="password"
-              placeholder="Ingrese su contraseña"
-            />
-          </div>
-          <button type="submit" class="btn-login" [disabled]="loginForm.invalid">
-            Ingresar
-          </button>
-          <div class="demo-info">
-            <small>✨ Datos falsos: cualquier usuario/contraseña (ej: admin / 123)</small>
-          </div>
-        </form>
       </div>
     </div>
-  `,
-  styles: [`
-    .login-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #f5f0ff 0%, #e8e0ff 100%);
-      padding: 1rem;
-    }
-    .login-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      border-radius: 2rem;
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: transform 0.2s ease;
-    }
-    .login-card:hover {
-      transform: translateY(-5px);
-    }
-    .login-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .login-header h1 {
-      color: #5e2a84;
-      font-size: 1.9rem;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-    .login-header p {
-      color: #7c3a9e;
-      font-size: 0.95rem;
-    }
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #4a2b6e;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid #ddd0f0;
-      border-radius: 1rem;
-      font-size: 1rem;
-      transition: all 0.2s;
-      background: #fffef7;
-    }
-    input:focus {
-      outline: none;
-      border-color: #b77cf0;
-      box-shadow: 0 0 0 3px rgba(183, 124, 240, 0.2);
-    }
-    .btn-login {
-      width: 100%;
-      background: linear-gradient(95deg, #7c3a9e, #b77cf0);
-      color: white;
-      border: none;
-      padding: 0.9rem;
-      border-radius: 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      margin-top: 0.5rem;
-    }
-    .btn-login:hover:not(:disabled) {
-      transform: scale(1.02);
-      background: linear-gradient(95deg, #6b2e8a, #a86be0);
-    }
-    .btn-login:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .demo-info {
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #b77cf0;
-    }
-  `]
+  `
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required, Validators.minLength(2)]],
+      password: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const { username, password } = this.loginForm.value;
-      const success = this.authService.login(username, password);
-      if (success) {
-        this.router.navigate(['/dashboard']);
-      }
+      
+      setTimeout(() => {
+        const success = this.authService.login(username, password);
+        this.isLoading = false;
+        
+        if (success) {
+          this.toastr.success('¡Bienvenido!', 'Sesión iniciada', {
+            timeOut: 2000,
+            progressBar: true,
+          });
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.toastr.error('Credenciales inválidas', 'Error de autenticación', {
+            timeOut: 3000,
+          });
+        }
+      }, 800);
     }
   }
 }
