@@ -12,21 +12,22 @@ import { NgxChartsModule, Color, ScaleType } from '@swimlane/ngx-charts';
         <h4 class="text-lg font-bold text-neutral-900 mb-4">📊 Índices de Incidencia y Casos Mortales</h4>
         
         <!-- Gráfico de Barras Horizontal -->
-        <div *ngIf="data && data.length > 0" class="h-80 w-full bg-neutral-50 rounded-xl p-4">
-          <ngx-charts-bar-horizontal
-            [view]="view"
+        <div *ngIf="data && data.length > 0" class="h-96 w-full bg-neutral-50 rounded-xl p-4 flex justify-center">
+          <ngx-charts-bar-vertical-2d
             [results]="data"
-            [scheme]="colorScheme"  
+            [scheme]="colorScheme"
             [gradient]="true"
             [xAxis]="true"
             [yAxis]="true"
             [legend]="true"
             [showXAxisLabel]="true"
             [showYAxisLabel]="true"
-            xAxisLabel="Valor"
-            yAxisLabel="Año"
-            [tooltipDisabled]="false">
-          </ngx-charts-bar-horizontal>
+            xAxisLabel="Año"
+            yAxisLabel="Índice / Cantidad"
+            [tooltipDisabled]="false"
+            [barPadding]="8"
+            [groupPadding]="16">
+          </ngx-charts-bar-vertical-2d>
         </div>
         
         <div *ngIf="!data || data.length === 0" class="h-80 w-full bg-neutral-50 rounded-xl p-4 flex items-center justify-center">
@@ -48,7 +49,7 @@ import { NgxChartsModule, Color, ScaleType } from '@swimlane/ngx-charts';
         
         <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-500">
           <p class="text-xs text-neutral-600 mb-1">Casos Mortales</p>
-          <p class="text-2xl font-bold text-red-700">{{ totalDeaths }}</p>
+          <p class="text-2xl font-bold text-red-700">{{ totalDeaths | number:'1.0-2' }}</p>
         </div>
         
         <div class="bg-secondary-50 rounded-lg p-4 border-l-4 border-secondary-500">

@@ -175,9 +175,9 @@ import { StatisticsChartComponent } from './statistics-chart.component';
                   {{ est.loadingCiiu ? '🧠 Pensando...' : (est.ciiuCode ? '✓ CIIU: ' + est.ciiuCode : '🤖 Sugerir CIIU') }}
                 </button>
 
-                <button *ngIf="est.ciiuCode" (click)="onVerEstadisticas(est)" [disabled]="est.statsLoading" class="px-3 py-2 rounded-lg text-xs font-semibold bg-gradient-primary text-white hover:shadow-lg transition">
-                  {{ est.statsLoading ? '⏳ Cargando...' : '📊 Estadísticas' }}
-                </button>
+              <button *ngIf="est.ciiuCode" (click)="onVerEstadisticas(est)" [disabled]="est.statsLoading" class="px-3 py-2 rounded-lg text-xs font-semibold bg-neutral-800 text-white hover:bg-neutral-900 hover:shadow-lg transition-all duration-300">
+                {{ est.statsLoading ? '⏳ Cargando...' : '📊 Estadísticas' }}
+              </button>
               </div>
 
               <!-- CIIU Tooltip -->
@@ -212,7 +212,7 @@ import { StatisticsChartComponent } from './statistics-chart.component';
                 <h4 class="text-lg font-bold text-neutral-900 mb-3 flex items-center gap-2">
                   <span class="text-2xl">🤖</span> Análisis Inteligente (IA)
                 </h4>
-                <p class="text-neutral-700 leading-relaxed">{{ selectedEstablishment.analisisIA }}</p>
+                <p class="text-neutral-700 leading-relaxed whitespace-pre-wrap">{{ selectedEstablishment.analisisIA }}</p>
               </div>
             </div>
 
