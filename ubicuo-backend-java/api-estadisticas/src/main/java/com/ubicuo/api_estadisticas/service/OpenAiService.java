@@ -105,17 +105,17 @@ public class OpenAiService {
             datosTexto.append("\n");
         }
         
-        String prompt = "Actúa como un Senior Data Analyst y Experto en Inteligencia de Negocios orientado a la Seguridad Ocupacional.\\n" +
-                "A continuación te proveeré un extracto de una base de datos multidimensional (Data Warehouse) con el historial " +
-                "del rubro: '" + rubro + "'.\\n\\n" +
-                "DATOS HISTÓRICOS:\\n" + datosTexto.toString() + "\\n\\n" +
-                "INSTRUCCIONES PARA EL REPORTE EJECUTIVO:\\n" +
-                "Redacta un informe gerencial actuando como si la alta gerencia te pidiera que le expliques ese informe. No te limites en tu análisis. Debes incluir:\\n" +
-                "1. Evolución Histórica: Detecta tendencias a largo plazo, picos anómalos o mejoras significativas a lo largo de los años.\\n" +
-                "2. Correlaciones: Si los datos muestran letalidad, mortalidad o incidencias, explica cómo se relacionan entre sí en este rubro específico.\\n" +
-                "3. Nivel de Riesgo Estructural: Define el nivel de peligrosidad del sector y justifícalo con los números proporcionados.\\n" +
-                "4. Recomendaciones Estratégicas: Brinda directivas de modernización y prevención de alto nivel orientadas a la gerencia.\\n\\n" +
-                "Utiliza un tono corporativo, analítico y persuasivo. Puedes usar negritas y párrafos separados para estructurar la lectura, pero no uses tablas ni gráficos ASCII.";
+        String prompt = "Actúa como un Senior Data Analyst reportando a la Alta Gerencia sobre Seguridad Ocupacional.\n" +
+                "A continuación tienes el historial estadístico multidimensional del rubro: '" + rubro + "'.\n\n" +
+                "DATOS HISTÓRICOS:\n" + datosTexto.toString() + "\n\n" +
+                "INSTRUCCIONES ESTRICTAS PARA EL REPORTE EJECUTIVO:\n" +
+                "Tu objetivo es explicarle a la gerencia la situación general de un vistazo (en términos muy claros, directos y 'digeridos') para facilitar la toma de decisiones.\n\n" +
+                "REGLA DE ORO: ESTÁ ABSOLUTAMENTE PROHIBIDO listar los datos año por año o hacer un recuento numérico. Debes procesar la información internamente y entregar ÚNICAMENTE conclusiones de alto nivel.\n\n" +
+                "Estructura tu respuesta en 3 bloques cortos y precisos:\n" +
+                "1. La Foto General: ¿Estamos mejor, peor o estables? Resume la tendencia histórica y el nivel de riesgo mas o menos 10 líneas.\n" +
+                "2. Hallazgos Críticos: Menciona únicamente si hay alguna correlación preocupante (ej. bajan los accidentes pero suben las muertes) o algún pico anómalo que la gerencia deba saber.\n" +
+                "3. Plan de Acción: Da 2 directivas de prevención o modernización estratégicas muy al grano.\n\n" +
+                "Usa un tono ejecutivo, persuasivo y seguro. Utiliza viñetas cortas y texto en negrita para resaltar los conceptos clave. No uses tablas ni gráficos ASCII.";
                 
         return consultarOpenAI(prompt);
     }
