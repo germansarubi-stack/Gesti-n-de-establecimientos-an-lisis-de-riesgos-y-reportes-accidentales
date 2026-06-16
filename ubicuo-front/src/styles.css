@@ -1,9 +1,8 @@
 /* Directivas de Tailwind CSS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:opsz,wght@8..72,300;8..72,400;8..72,500;8..72,600;8..72,700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:opsz,wght@8..72,300;8..72,400;8..72,500;8..72,600;8..72,700&display=swap');
 
 * {
   margin: 0;

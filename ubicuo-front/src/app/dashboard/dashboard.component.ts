@@ -5,14 +5,16 @@ import { Router } from '@angular/router';
 import { EstablishmentService } from '../services/establishment.service';
 import { AuthService } from '../services/auth.service';
 import { Establishment } from '../models/establishment.model';
-import { BaseChartDirective } from 'ng2-charts';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { DashboardKPIComponent } from './dashboard-kpi.component';
+import { CarouselEstablishmentsComponent } from './carousel-establishments.component';
+import { StatisticsChartComponent } from './statistics-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BaseChartDirective],
+  imports: [CommonModule, ReactiveFormsModule, DashboardKPIComponent, CarouselEstablishmentsComponent, StatisticsChartComponent],
   template: `
     <div class="min-h-screen bg-gradient-to-br from-neutral-50 via-secondary-50 to-neutral-50">
       <!-- Header -->
@@ -40,6 +42,12 @@ import Swal from 'sweetalert2';
 
       <!-- Content -->
       <main class="container-safe py-8">
+        <!-- Section: KPI Dashboard -->
+        <app-dashboard-kpi [establishments]="establishments"></app-dashboard-kpi>
+
+        <!-- Section: Carrusel de Establecimientos -->
+        <app-carousel-establishments *ngIf="establishments.length > 0" [establishments]="establishments"></app-carousel-establishments>
+
         <!-- Section: Agregar Establecimiento -->
         <section class="mb-12">
           <h2 class="section-header mb-6">➕ Cargar Nuevo Establecimiento</h2>
@@ -210,14 +218,7 @@ import Swal from 'sweetalert2';
 
             <!-- Chart -->
             <div *ngIf="selectedEstablishment.chartData" class="mb-8">
-              <h4 class="text-lg font-bold text-neutral-900 mb-4">📈 Índices de Incidencia y Casos Mortales</h4>
-              <div class="h-80 bg-neutral-50 rounded-xl p-6">
-                <canvas baseChart
-                  [data]="selectedEstablishment.chartData"
-                  [options]="{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }"
-                  type="bar">
-                </canvas>
-              </div>
+              <app-statistics-chart [chartData]="selectedEstablishment.chartData"></app-statistics-chart>
             </div>
 
             <!-- Footer -->

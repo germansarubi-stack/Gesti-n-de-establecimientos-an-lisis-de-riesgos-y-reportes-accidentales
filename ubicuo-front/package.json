@@ -12,6 +12,7 @@
   "packageManager": "npm@11.13.0",
   "dependencies": {
     "@angular/animations": "^20.1.8",
+    "@angular/cdk": "^22.0.1",
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
     "@angular/core": "^22.0.0",
@@ -19,6 +20,7 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/platform-browser-dynamic": "^22.0.0",
     "@angular/router": "^22.0.0",
+    "@swimlane/ngx-charts": "^24.0.0-alpha.1",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.1",
     "autoprefixer": "^10.5.0",
