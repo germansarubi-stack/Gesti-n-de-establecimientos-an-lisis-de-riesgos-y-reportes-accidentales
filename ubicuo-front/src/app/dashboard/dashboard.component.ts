@@ -117,7 +117,7 @@ import { StatisticsChartComponent } from './statistics-chart.component';
 
         <!-- Section: Mis Establecimientos -->
         <section>
-          <h2 class="section-header mb-6">📋 Mis Establecimientos</h2>
+          <h2 class="section-header mb-6">Mis Establecimientos</h2>
           
           <!-- Empty state -->
           <div *ngIf="establishments.length === 0" class="card text-center py-12">
@@ -300,10 +300,14 @@ export class DashboardComponent implements OnInit {
       text: 'Esta acción no se puede deshacer',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#8b18ff',
-      cancelButtonColor: '#6b7280',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      // Usamos las clases blindadas de nuestro styles.css
+      customClass: {
+        confirmButton: 'swal-btn-danger',
+        cancelButton: 'swal-btn-cancel'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.estService.deleteEstablishment(id);
@@ -428,10 +432,15 @@ export class DashboardComponent implements OnInit {
       title: '¿Cerrar sesión?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#8b18ff',
-      cancelButtonColor: '#6b7280',
       confirmButtonText: 'Sí, salir',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      // Apagamos los estilos nativos de SweetAlert
+      buttonsStyling: false, 
+      // Inyectamos las clases de Tailwind
+      customClass: {
+        confirmButton: 'btn-secondary text-white px-6 py-2 rounded-lg mx-2 hover:shadow-lg hover:opacity-90 transition-all duration-300',
+        cancelButton: 'bg-neutral-600 text-white px-6 py-2 rounded-lg mx-2 hover:bg-neutral-700 hover:shadow-lg transition-all duration-300'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.authService.logout();

@@ -96,7 +96,7 @@ import { ToastrService } from 'ngx-toastr';
           <!-- Footer -->
           <div class="mt-6 text-center">
             <p class="text-xs text-neutral-500">
-              © 2024 Sistema de Higiene y Seguridad CIIU
+              © 2026 Sistema de Higiene y Seguridad.
             </p>
           </div>
         </div>

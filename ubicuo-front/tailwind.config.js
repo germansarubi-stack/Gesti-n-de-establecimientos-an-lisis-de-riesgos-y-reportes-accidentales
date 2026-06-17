@@ -4,86 +4,47 @@ export default {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    colors: {
-      // Paleta profesional: Amarillo, Celeste, Violeta
-      primary: {
-        50: '#fffbea',
-        100: '#fff7d6',
-        200: '#ffecad',
-        300: '#ffe184',
-        400: '#ffd65b',
-        500: '#ffc800', // Amarillo principal
-        600: '#cc9f00',
-        700: '#997700',
-        800: '#664f00',
-        900: '#332800',
-      },
-      secondary: {
-        50: '#e0f7ff',
-        100: '#b3edff',
-        200: '#80e1ff',
-        300: '#4dd5ff',
-        400: '#26cbff',
-        500: '#00c3ff', // Celeste principal
-        600: '#00a8d8',
-        700: '#0088b0',
-        800: '#006888',
-        900: '#004860',
-      },
-      accent: {
-        50: '#f4e8ff',
-        100: '#e8d1ff',
-        200: '#d1a3ff',
-        300: '#b974ff',
-        400: '#a246ff',
-        500: '#8b18ff', // Violeta principal
-        600: '#6d0be6',
-        700: '#5408cc',
-        800: '#3c06a3',
-        900: '#24047a',
-      },
-      // Colores neutros
-      white: '#ffffff',
-      black: '#000000',
-      neutral: {
-        50: '#f9fafb',
-        100: '#f3f4f6',
-        200: '#e5e7eb',
-        300: '#d1d5db',
-        400: '#9ca3af',
-        500: '#6b7280',
-        600: '#4b5563',
-        700: '#374151',
-        800: '#1f2937',
-        900: '#111827',
-      },
-      // Colores de estado
-      red: {
-        50: '#fef2f2',
-        100: '#fee2e2',
-        500: '#ef4444',
-        700: '#b91c1c',
-      },
-      yellow: {
-        50: '#fefce8',
-        100: '#fef9c3',
-        500: '#eab308',
-        700: '#ca8a04',
-      },
-      green: {
-        50: '#f0fdf4',
-        100: '#dcfce7',
-        500: '#22c55e',
-        700: '#15803d',
-      },
-      blue: {
-        50: '#eff6ff',
-        100: '#dbeafe',
-        500: '#3b82f6',
-        700: '#1d4ed8',
-      },
-    },
     extend: {
+      // 1. AHORA COLORS ESTÁ ADENTRO DE EXTEND. 
+      // Tailwind no borra sus colores nativos, solo agrega estos nuevos.
+      colors: {
+        primary: {
+          50: '#fffbea',
+          100: '#fff7d6',
+          200: '#ffecad',
+          300: '#ffe184',
+          400: '#ffd65b',
+          500: '#ffc800', // Amarillo principal
+          600: '#cc9f00',
+          700: '#997700',
+          800: '#664f00',
+          900: '#332800',
+        },
+        secondary: {
+          50: '#e0f7ff',
+          100: '#b3edff',
+          200: '#80e1ff',
+          300: '#4dd5ff',
+          400: '#26cbff',
+          500: '#00c3ff', // Celeste principal
+          600: '#00a8d8',
+          700: '#0088b0',
+          800: '#006888',
+          900: '#004860',
+        },
+        accent: {
+          50: '#f4e8ff',
+          100: '#e8d1ff',
+          200: '#d1a3ff',
+          300: '#b974ff',
+          400: '#a246ff',
+          500: '#8b18ff', // Violeta principal
+          600: '#6d0be6',
+          700: '#5408cc',
+          800: '#3c06a3',
+          900: '#24047a',
+        },
+      },
       fontFamily: {
         sans: ['Poppins', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },

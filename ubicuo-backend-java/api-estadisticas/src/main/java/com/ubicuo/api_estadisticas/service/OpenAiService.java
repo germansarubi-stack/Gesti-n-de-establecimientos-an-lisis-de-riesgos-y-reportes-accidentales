@@ -115,7 +115,7 @@ public class OpenAiService {
                 "1. La Foto General: ¿Estamos mejor, peor o estables? Resume la tendencia histórica y el nivel de riesgo mas o menos 10 líneas.\n" +
                 "2. Hallazgos Críticos: Menciona únicamente si hay alguna correlación preocupante (ej. bajan los accidentes pero suben las muertes) o algún pico anómalo que la gerencia deba saber.\n" +
                 "3. Plan de Acción: Da 2 directivas de prevención o modernización estratégicas muy al grano.\n\n" +
-                "Usa un tono ejecutivo, persuasivo y seguro. Utiliza viñetas cortas y texto en negrita para resaltar los conceptos clave. No uses tablas ni gráficos ASCII."
+                "Usa un tono ejecutivo, persuasivo y seguro. Utiliza viñetas cortas y texto en negrita para resaltar los conceptos clave. No uses tablas ni gráficos ASCII.\n" + 
                 "No utilices formato Markdown. No uses asteriscos ni numerales. Separa los párrafos únicamente con saltos de línea dobles.";
                 
         return consultarOpenAI(prompt);

@@ -12,7 +12,7 @@ register();
   imports: [CommonModule],
   template: `
     <div class="mb-8">
-      <h2 class="section-header mb-6">🎠 Establecimientos Destacados</h2>
+      <h2 class="section-header mb-6">Establecimientos Destacados</h2>
       
       <swiper-container 
         [slides-per-view]="slidesPerView"
